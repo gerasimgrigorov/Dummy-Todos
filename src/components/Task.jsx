@@ -1,8 +1,10 @@
 import { useState } from "react";
+import { useTasksDispatch } from "../store/TasksContext";
 
-export default function Task({ task, dispatch }) {
+export default function Task({ task }) {
   const [editText, setEditText] = useState(task.text);
   const [isEditing, setIsEditing] = useState(false);
+  const dispatch = useTasksDispatch()
 
   function handleSave() {
     dispatch({ type: "EDIT_TASK", task: { ...task, text: editText } });

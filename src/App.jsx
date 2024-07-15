@@ -1,20 +1,20 @@
-import { useReducer } from 'react'
-// import viteLogo from '/vite.svg'
 import Header from './components/Header'
 import TaskList from './components/TaskList'
 import Form from './components/Form'
-import { taskReducer } from './util/taskReducer'
+import TasksProvider from './store/TasksContext'
 import './App.css'
 
 function App() {
-  const [state, dispatch] = useReducer(taskReducer, { tasks: [] })
-  console.log(state)
+  // const [state, dispatch] = useReducer(taskReducer, { tasks: [] })
+  // const [isEditing, setIsEditing] = useState()
+
   return (
-    <>
+    <TasksProvider>
       <Header/>
-      <Form dispatch={dispatch}/>
-      <TaskList tasks={state.tasks} dispatch={dispatch}/>
-    </>
+      <Form />
+      <TaskList />
+      {/* isEditing={isEditing} setIsEditing={setIsEditing} */}
+    </TasksProvider>
   )
 }
 

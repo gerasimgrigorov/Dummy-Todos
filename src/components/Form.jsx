@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { notEmptyField } from "../util/validations";
 import Input from "./Input";
+import { useTasksDispatch } from "../store/TasksContext";
 
-export default function Form({ dispatch }) {
+export default function Form() {
   const [text, setText] = useState("");
   const [error, setError] = useState();
+  const dispatch = useTasksDispatch()
 
   function handleForm(e) {
     e.preventDefault();
@@ -26,6 +28,7 @@ export default function Form({ dispatch }) {
         <input
           type="text"
           id="task"
+          placeholder="Type here..."
           value={text}
           onChange={(e) => {
             setText(e.target.value);
