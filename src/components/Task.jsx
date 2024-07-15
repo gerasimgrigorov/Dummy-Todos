@@ -1,18 +1,19 @@
-import { useState } from "react";
-import { useTasksDispatch } from "../store/TasksContext";
+import { useContext, useState } from "react";
+import { EditContext, useTasksDispatch } from "../store/TasksContext";
 
 export default function Task({ task }) {
   const [editText, setEditText] = useState(task.text);
-  const [isEditing, setIsEditing] = useState(false);
-  const dispatch = useTasksDispatch()
+  // const [error, setError] = useState();
+  const dispatch = useTasksDispatch();
+  const { isEditing, setIsEditing } = useContext(EditContext)
 
   function handleSave() {
     dispatch({ type: "EDIT_TASK", task: { ...task, text: editText } });
-    setIsEditing(false);
+    setIsEditing(null);
   }
 
   return (
-    <li key={task.id} className="task-element">
+    <li className="task-element">
       <input
         type="checkbox"
         className="checkbox-input"
@@ -24,7 +25,7 @@ export default function Task({ task }) {
           })
         }
       />
-      {isEditing ? (
+      {isEditing && isEditing.id === task.id ? (
         <input
           type="text"
           className="text-input"
@@ -35,18 +36,31 @@ export default function Task({ task }) {
         <span className="task-text">{editText}</span>
       )}{" "}
       <button
-        className={`edit-button ${isEditing && "save-button"}`}
+        className={`edit-button ${isEditing && isEditing.id === task.id && "save-button"}`}
         onClick={() => {
           if (isEditing) {
-            handleSave();
+            if(isEditing.id === task.id){
+              handleSave();
+            }
           } else {
-            setIsEditing(true);
+            setIsEditing(task);
           }
         }}
       >
-        {isEditing ? "Save" : "Edit"}
+        {isEditing && isEditing.id === task.id ? "Save" : "Edit"}
       </button>
-      {isEditing && <button className="delete-task" onClick={() => dispatch({type: 'DELETE_TASK', task})}>🗑️</button>}
+      {isEditing && isEditing.id === task.id && (
+        <button
+          className="delete-task"
+          onClick={() => {
+            dispatch({ type: "DELETE_TASK", task })
+            setIsEditing(null)
+          }}
+        >
+          🗑️
+        </button>
+      )} <br />
+      {/* {error && <p className="error-message">{error}</p>} */}
     </li>
   );
 }
